@@ -1,4 +1,4 @@
-const {expect} = require('chai')
+const {expect} = require('chai');
 const {parseObject, normalizeFunctionSource} = require('./object-parser');
 
 describe('object-parser', () => {
@@ -110,7 +110,7 @@ describe('object-parser', () => {
       expect(obj.fn3[0].defaultValue).to.be.equal(`(() => 5)()`);
       expect(obj.fn3[1].defaultValue).to.be.equal(`function () {
     return 5;
-}()`);
+}()`  );
     });
 
 
