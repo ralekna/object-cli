@@ -30,7 +30,7 @@ const {generate} = require('escodegen');
 function parseObject(object) {
   return Object
     .keys(object)
-    .filter(key => object.hasOwnProperty(key) && typeof object[key] === 'function')
+    .filter(key => object[key] && typeof object[key] === 'function')
     .reduce((store, key) => (store[key] = getArguments(object[key]), store), {});
 }
 

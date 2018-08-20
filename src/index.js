@@ -23,8 +23,41 @@
 
  */
 
+const parseArgs = require('minimist');
+const { parseObject } = require('./object-parser');
+const { processCommand } = require('./io-processor');
 
-function init(object) {
+function createInstance(object) {
+  if (object && typeof object !== 'function' && object === Object(object) && !Array.isArray(object)) {
+    // TODO: decide if there's a need to save initial instance
+    return object;
+  } else if (typeof object === 'function') {
+    try {
+      return createInstance(new object());
+    } catch (error) {
+      if (error instanceof TypeError) {
+        return createInstance(object());
+        // not caching here - let it break execution
+      }
+    }
+  }
+  throw new Error(`Only object, class or function can by supplied.`);
+
+}
+
+/**
+ * Initialize object for CLI interface
+ * @param object  object from which to create a CLI interface. In can be a plain object, class instance, class definition (will be )
+ * @param [args]
+ */
+function init(object, args) {
+
+  let instance = createInstance(object);
+  let instanceMeta = parseObject(instance);
+
+  let parsedArgs = parseArgs(args || process.argv.slice(2));
+
+  return processCommand(instance, instanceMeta, parsedArgs);
 
 }
 

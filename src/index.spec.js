@@ -23,10 +23,51 @@
 
  */
 
-const {expect} = require('chai')
+const {expect} = require('chai');
+const init = require('./index');
 
-xdescribe('object-cli', () => {
-  describe('object parsing', () => {
-    expect(true).to.equal(true);
-  })
-})
+describe('object-cli', () => {
+  describe('init', () => {
+
+    it(`should execute function on given object with provided args array`, async () => {
+      let result = await init({
+        plus(first, second) {
+          return first + second;
+        }
+      }, ['plus', '1', '2']);
+
+      expect(result).to.be.equal(3);
+    });
+
+    it(`should execute function on given object with provided named args`, async () => {
+      let result = await init({
+        plus(first, second) {
+          return first + second;
+        }
+      }, ['plus', '--first', '1', '--second', '2']);
+
+      expect(result).to.be.equal(3);
+    });
+
+    it(`should execute function on given object with one provided named arg and one free`, async () => {
+      let result = await init({
+        plus(first, second) {
+          return first + second;
+        }
+      }, ['plus', '1', '--second', '2']);
+
+      expect(result).to.be.equal(3);
+    });
+
+    it(`should execute function on given object with default params`, async () => {
+      let result = await init({
+        plus(first = 1, second = 2) {
+          return first + second;
+        }
+      }, ['plus']);
+
+      expect(result).to.be.equal(3);
+    });
+
+  });
+});
