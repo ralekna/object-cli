@@ -57,7 +57,13 @@ function init(object, args) {
 
   let parsedArgs = parseArgs(args || process.argv.slice(2));
 
-  return processCommand(instance, instanceMeta, parsedArgs);
+  return processCommand(instance, instanceMeta, parsedArgs)
+    .catch(error => {
+      if (error) {
+        console.error(error);
+      }
+      process.exit(1);
+    });
 
 }
 
