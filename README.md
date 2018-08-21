@@ -27,6 +27,3 @@ If you run `myScript.js` with node in console
 ## TODO:
 - Interactive command execution
 - special methods to handle STDIN
-
-## Know issues
-- Can't pass a class definition instead of object

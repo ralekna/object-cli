@@ -27,9 +27,24 @@
 const {parseScript} = require('esprima');
 const {generate} = require('escodegen');
 
+function inheritedPropertyNames(obj) {
+  if ((typeof obj) !== "object") { // null is not a problem
+    throw new Error("Only objects are allowed");
+  }
+  const props = {};
+  while(obj) {
+    Object.getOwnPropertyNames(obj).forEach((name) => {
+      if (Object.prototype[name] !== obj[name] && name !== 'constructor') {
+        props[name] = true;
+      }
+    });
+    obj = Object.getPrototypeOf(obj);
+  }
+  return Object.getOwnPropertyNames(props);
+}
+
 function parseObject(object) {
-  return Object
-    .keys(object)
+  return inheritedPropertyNames(object)
     .filter(key => object[key] && typeof object[key] === 'function')
     .reduce((store, key) => (store[key] = getArguments(object[key]), store), {});
 }
