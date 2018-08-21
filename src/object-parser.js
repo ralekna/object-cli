@@ -45,7 +45,7 @@ function inheritedPropertyNames(obj) {
 
 function parseObject(object) {
   return inheritedPropertyNames(object)
-    .filter(key => object[key] && typeof object[key] === 'function')
+    .filter(key => object[key] && typeof object[key] === 'function' && key.indexOf('_') !== 0)
     .reduce((store, key) => (store[key] = getArguments(object[key]), store), {});
 }
 
